@@ -4,7 +4,6 @@ title: Home
 group: navigation
 permalink: "index.html"
 ---
-{% include JB/setup %}
 
 Contact
 -------

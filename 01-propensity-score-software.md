@@ -136,15 +136,15 @@ permalink: "software.html"
 
 #### Software for performing analyses of sensitivity to an unobserved confounder
 
-##### R
+&nbsp;&nbsp;&nbsp;**R**
 * [rbounds: An R package for sensitivity analysis with matched data (L. Keele).](http://www.personal.psu.edu/ljk20/rbounds.html)
 * [sensitivity function in twang package (G. Ridgeway et al.).](http://rss.acs.unt.edu/Rdoc/library/twang/html/sensitivity.html)
 
-##### Stata
+&nbsp;&nbsp;&nbsp;**Stata**
 * [rbounds: Stata module to perform Rosenbaum sensitivity analysis for average treatment effects on the treated (M. Gangl)](http://econpapers.repec.org/software/bocbocode/s438301.htm)
 * [sensatt: A simulation-based sensitivity analysis for matching estimators (T. Nannicini)](http://www.tommasonannicini.eu/Portals/0/sensatt_wp_4.pdf)
     - Nannicini T. (2007). A Simulation-Based Sensitivity Analysis for Matching Estimators. Stata Journal, 7(3), 334-350
     - Ichino A., Mealli F., Nannicini T. (2008). From Temporary Help Jobs to Permanent Employment: What Can We Learn from Matching Estimators and their Sensitivity? Journal of Applied Econometrics, 23(3), 305-327.
  
-##### Excel
+&nbsp;&nbsp;&nbsp;**Excel**
 * [Love, T.E. (2008) Spreadsheet-based sensitivity analysis calculations for matched samples. Center for Health Care Research & Policy, Case Western Reserve University.](http://www.chrp.org/propensity/)

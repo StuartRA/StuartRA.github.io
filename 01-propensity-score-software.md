@@ -62,6 +62,8 @@ permalink: "software.html"
 * Hainmueller, J. (2012). Entropy balancing for causal effects: A multivariate reweighting method to produce balanced samples in observational studies. Political Analysis 20: 25-46.
 * Reweights dataset such that covariate distributions in reweighted data satisfy a set of user specified moment conditions.
 <br>
+<br>
+<br>
 
 #### Stata
 
@@ -88,6 +90,8 @@ permalink: "software.html"
 &nbsp;&nbsp;&nbsp;[cem](http://gking.harvard.edu/cem/)
 * [Iacus, S.M., King, G., and Porro, G. (2008). Matching for Causal Inference Without Balance Checking.](gking.harvard.edu/files/abs/cem-abs.shtml)
 * Implements coarsened exact matching
+<br>
+<br>
 <br>
 
 #### SAS
@@ -116,6 +120,8 @@ permalink: "software.html"
 &nbsp;&nbsp;&nbsp;Variable ratio matching, optimal matching algorithm
 [Kosanke, J., and Bergstralh, E. (2004). Match cases to controls using variable optimal matching.](http://www.mayo.edu/research/departments-divisions/department-health-sciences-research/division-biomedical-statistics-informatics/software/locally-written-sas-macros)
 <br>
+<br>
+<br>
 
 #### SPSS
 
@@ -124,6 +130,8 @@ permalink: "software.html"
 * Nearest neighbor propensity score matching with various options (with/without replacement, calipers, k to 1, etc.)
 * Detailed balance statistics and graphs
 * Actually calls MatchIt using a point and click interface
+<br>
+<br>
 <br>
 
 #### Software for performing analyses of sensitivity to an unobserved confounder

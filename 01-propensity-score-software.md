@@ -4,6 +4,7 @@ title: Propensity Score Software
 group: navigation
 permalink: "software.html"
 ---
+{% include JB/setup %}
 
 Software for implementing matching methods and propensity scores
 -------

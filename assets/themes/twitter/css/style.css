@@ -1,5 +1,6 @@
 /* Custom container */
 .container {
+  margin: 10%
   padding: 10%;
   max-width: 1200px; }
 

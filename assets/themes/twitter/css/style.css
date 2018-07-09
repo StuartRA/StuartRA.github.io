@@ -1,6 +1,6 @@
 /* Custom container */
 .container-fluid {
-  margin: 0 80px;
+  margin: 0 100px;
   max-width: 1200px; }
 
 .container-fluid > hr {

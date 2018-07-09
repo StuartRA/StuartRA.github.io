@@ -1,6 +1,6 @@
 /* Custom container */
 .container {
-  margin: 0 100px;
+  margin: 0 200px;
   max-width: 1200px; }
 
 .container > hr {

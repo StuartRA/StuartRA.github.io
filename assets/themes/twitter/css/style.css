@@ -1,9 +1,9 @@
 /* Custom container */
-.container-narrow {
+.container-fluid {
   margin: 0 100px;
-  max-width: 1500px; }
+  max-width: 1200px; }
 
-.container-narrow > hr {
+.container-fluid > hr {
   margin: 30px 0; }
 
 .navbar .nav {

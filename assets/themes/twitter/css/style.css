@@ -1,7 +1,7 @@
 /* Custom container */
 .container {
-  margin-left: 10%;
-  margin-right: 10%;
+  padding-right: 10%;
+  padding-left: 10%;
   max-width: 1200px; }
 
 .container > hr {

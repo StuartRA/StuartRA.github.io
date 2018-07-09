@@ -1,7 +1,6 @@
 /* Custom container */
 .container {
-  padding-right: 10%;
-  padding-left: 10%;
+  padding: 10%;
   max-width: 1200px; }
 
 .container > hr {

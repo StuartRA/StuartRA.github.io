@@ -1,2 +1,6 @@
+.container {
+  margin: 0 50px;
+}
+
 .navbar .nav {
   float: right; }

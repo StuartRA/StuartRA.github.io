@@ -15,10 +15,10 @@ Department of Mental Health <br>
 Department of Biostatistics <br>
 Department of Health Policy and Management <br>
 Johns Hopkins Bloomberg School of Public Health <br>
-624 N Broadway
-Baltimore, MD 21205
+624 N Broadway <br>
+Baltimore, MD 21205 <br>
 
-<p>Email: <a href="mailto:estuart@jhsph.edu">estuart@jhsph.edu</a>
+<p>Email: <a href="mailto:estuart@jhsph.edu">estuart@jhsph.edu</a> <br>
   Phone: 410-502-6222
 </p>
 

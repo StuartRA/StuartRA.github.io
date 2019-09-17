@@ -3215,12 +3215,10 @@ plot2MainReasonsBar&lt;- function(df, reason_num, wna = FALSE, perc=FALSE) {
 <div id="no.-responses-and-base-rates" class="section level2">
 <h2>No. Responses and base rates</h2>
 <pre class="r"><code>tab %&gt;%
-  kable(caption = &#39;Applicants survey data as of Sept 16, 2019&#39;) %&gt;%
-  kable_styling()</code></pre>
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>
-Applicants survey data as of Sept 16, 2019
-</caption>
+  kable() %&gt;%
+  kable_styling(bootstrap_options = &quot;striped&quot;, full_width = F, position = &quot;left&quot;) %&gt;%
+  footnote(general =  &#39;Applicants survey data as of Sept 16, 2019&#39;)</code></pre>
+<table class="table table-striped" style="width: auto !important; ">
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -3344,6 +3342,18 @@ MHP
 </td>
 </tr>
 </tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<span style="font-style: italic;">Note: </span>
+</td>
+</tr>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<sup></sup> Applicants survey data as of Sept 16, 2019
+</td>
+</tr>
+</tfoot>
 </table>
 </div>
 <div id="reason-1-for-declining-offer" class="section level2">

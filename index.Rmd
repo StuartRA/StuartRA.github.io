@@ -1,0 +1,396 @@
+---
+title: "Admitted Applicants Who Declined Offer of Admission: \n  Survey Analysis (Draft)"
+date: "September 16, 2019"
+output: 
+  html_document:
+    code_folding: hide
+    df_print: paged
+    theme: cosmo
+    toc: yes
+    toc_float: yes
+  word_document:
+    toc: yes
+  pdf_document: default
+  html:
+    latex_engine: xelatex
+header-includes: \usepackage{fontspec}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(RColorBrewer)
+library(readxl)
+library(xtable)
+library(tidyverse)
+library(kableExtra)
+```
+
+```{r message=FALSE, warning=FALSE}
+new13 <- "/Users/elenagoicoechea/Documents/Adm-Surveys/c13.xlsx"
+new12 <- "/Users/elenagoicoechea/Documents/Adm-Surveys/c12.xlsx"
+new11 <- "/Users/elenagoicoechea/Documents/Adm-Surveys/c11.xlsx"
+
+df19 <- as.data.frame(read_excel(new13))
+df18 <- as.data.frame(read_excel(new12))
+df17 <- as.data.frame(read_excel(new11))
+
+########## 1. CLEAN DATASET
+
+colnames(df19)[12] <- "program"
+colnames(df18)[12] <- "program"
+colnames(df17)[12] <- "program"
+
+colnames(df19)[13] <- "status"
+colnames(df18)[13] <- "status"
+colnames(df17)[13] <- "status"
+
+colnames(df19)[16] <- "answ"
+colnames(df18)[16] <- "answ"
+colnames(df17)[16] <- "answ"
+
+colnames(df19)[17] <- "reason1"
+colnames(df18)[17] <- "reason1"
+colnames(df17)[17] <- "reason1"
+
+colnames(df19)[18] <- "reason2"
+colnames(df18)[18] <- "reason2"
+colnames(df17)[18] <- "reason2"
+
+colnames(df19)[19] <- "reason3"
+colnames(df18)[19] <- "reason3"
+colnames(df17)[19] <- "reason3"
+
+colnames(df19)[20] <- "reason4"
+colnames(df18)[20] <- "reason4"
+colnames(df17)[20] <- "reason4"
+
+colnames(df19)[21] <- "reason_other_sch"
+colnames(df18)[21] <- "reason_other_sch"
+colnames(df17)[21] <- "reason_other_sch"
+
+
+fixReasons <- function(df) {
+df = df %>% mutate(reason1 = 
+    case_when(
+      str_detect(reason1, 'Other') ~ 'Other',
+    str_detect(reason1, 'financial') ~ 'Financial Aid',
+    str_detect(reason1, 'another school') ~ 'Another School',
+    str_detect(reason1, 'Personal') ~ 'Personal/Professional'))
+
+df = df %>% mutate(reason2 = 
+                     case_when(
+                       str_detect(reason2, 'Other') ~ 'Other',
+                       str_detect(reason2, 'financial') ~ 'Financial Aid',
+                       str_detect(reason2, 'another school') ~ 'Another School',
+                       str_detect(reason2, 'Personal') ~ 'Personal/Professional'))
+
+df = df %>% mutate(reason3 = 
+                     case_when(
+                       str_detect(reason3, 'Other') ~ 'Other',
+                       str_detect(reason3, 'financial') ~ 'Financial Aid',
+                       str_detect(reason3, 'another school') ~ 'Another School',
+                       str_detect(reason3, 'Personal') ~ 'Personal/Professional'))
+
+df = df %>% mutate(reason4 = 
+                     case_when(
+                       str_detect(reason4, 'Other') ~ 'Other',
+                       str_detect(reason4, 'financial') ~ ' Financial Aid',
+                       str_detect(reason4, 'another school') ~ 'Another School',
+                       str_detect(reason4, 'Personal') ~ 'Personal/Professional'))
+return(df)
+}
+
+df19 <- fixReasons(df19)
+df18 <- fixReasons(df18)
+df17 <- fixReasons(df17)
+
+# MAKE REASON COMBINATIONS
+
+df19 = df19 %>% mutate(twoMainReasons = paste0(paste0(reason1, ' + '), reason2))
+df18 = df18 %>% mutate(twoMainReasons = paste0(paste0(reason1, ' + '), reason2))
+df17 = df17 %>% mutate(twoMainReasons = paste0(paste0(reason1, ' + '), reason2))
+
+# FIX OTHER SCHOOLS REASONS
+df19 = df19 %>% mutate(reason_other_sch = 
+                         case_when(
+                           str_detect(reason_other_sch, 'I preferred to live in the city') ~ 'Preferred to live in the city (of the school selected)',
+                           str_detect(reason_other_sch, 'location') ~ 'Preferred to live in the city (of the school selected)',
+                           str_detect(reason_other_sch, 'Other') ~ 'Other',
+                           str_detect(reason_other_sch, 'contact with the faculty or staff') ~ 'More satisfying personal contact with the faculty or staff',
+                           str_detect(reason_other_sch, 'attractive financial') ~ 'Received a more attractive financial package',
+                           str_detect(reason_other_sch, 'another program that was preferable') ~ 'The school offered another program that was preferable',
+                           str_detect(reason_other_sch, 'tuition rate was less') ~ 'Tuition rate was less',
+                           str_detect(reason_other_sch, 'offered earlier acceptance') ~ 'The other school offered earlier acceptance',
+                           nchar(reason_other_sch) > 54 ~ 'Other'))
+
+df18 = df18 %>% mutate(reason_other_sch = 
+                         case_when(
+                           str_detect(reason_other_sch,'city') ~ 'Preferred to live in the city (of the school selected)',
+                           str_detect(reason_other_sch, 'location') ~ 'Preferred to live in the city (of the school selected)',
+                           str_detect(reason_other_sch, 'Other') ~ 'Other',
+                           str_detect(reason_other_sch, 'contact with the faculty or staff') ~ 'More satisfying personal contact with the faculty or staff',
+                           str_detect(reason_other_sch, 'attractive financial') ~ 'Received a more attractive financial package',
+                           str_detect(reason_other_sch, 'another program that was preferable') ~ 'The school offered another program that was preferable',
+                           str_detect(reason_other_sch, 'tuition rate was less') ~ 'Tuition rate was less',
+                           str_detect(reason_other_sch, 'offered earlier acceptance') ~ 'The other school offered earlier acceptance',
+                           nchar(reason_other_sch) > 54 ~ 'Other'))
+
+df17 = df17 %>% mutate(reason_other_sch = 
+                         case_when(
+                           str_detect(reason_other_sch, 'city') ~ 'Preferred to live in the city (of the school selected)',
+                           str_detect(reason_other_sch, 'location') ~ 'Preferred to live in the city (of the school selected)',
+                           str_detect(reason_other_sch, 'Other') ~ 'Other',
+                           str_detect(reason_other_sch, 'contact with the faculty or staff') ~ 'More satisfying personal contact with the faculty or staff',
+                           str_detect(reason_other_sch, 'attractive financial') ~ 'Received a more attractive financial package',
+                           str_detect(reason_other_sch, 'another program that was preferable') ~ 'The school offered another program that was preferable',
+                           str_detect(reason_other_sch, 'tuition rate') ~ 'Tuition rate was less',
+                           str_detect(reason_other_sch, 'earlier acceptance') ~ 'The other school offered earlier acceptance',
+                           nchar(reason_other_sch) > 54 ~ 'Other'))
+
+
+###### 2. ANALYZE
+
+### I. ALL
+
+## 1. Number of people that declined
+df19dec <- filter(df19, str_detect(status, 'Declined Offer'))
+df18dec <- filter(df18, str_detect(status, 'Declined Offer'))
+df17dec <- filter(df17, str_detect(status, 'Declined Offer'))
+
+num_decl19=nrow(df19dec)
+num_decl18=nrow(df18dec)
+num_decl17=nrow(df17dec)
+
+## 2. Number of people not admitted
+df19na <- filter(df19, str_detect(status, 'Not Admitted'))
+df18na <- filter(df18, str_detect(status, 'Not Admitted'))
+df17na <- filter(df17, str_detect(status, 'Not Admitted'))
+
+num_na19=nrow(df19na)
+num_na18=nrow(df18na)
+num_na17=nrow(df17na)
+
+## 3. Number of people enrolled
+df19adm <- filter(df19, str_detect(status, 'AdmEnroll'))
+df18adm <- filter(df18, str_detect(status, 'AdmEnroll'))
+df17adm <- filter(df17, str_detect(status, 'AdmEnroll'))
+
+num_enr19=nrow(df19adm)
+num_enr18=nrow(df18adm)
+num_enr17=nrow(df17adm)
+
+## 4. Number of responses (among those that declined)
+
+df19resp <- filter(df19dec, !is.na(answ))
+df18resp <- filter(df18dec, !is.na(answ))
+df17resp <- filter(df17dec, !is.na(answ))
+
+num_resp19 = nrow(df19resp) 
+num_resp18 = nrow(df18resp) 
+num_resp17 = nrow(df17resp) 
+
+## 5. % responses
+ansprop19 <- num_resp19/nrow(df19dec)
+ansprop18 <- num_resp18/nrow(df18dec)
+ansprop17 <- num_resp17/nrow(df17dec)
+
+
+####### II. MHP 
+
+mph19 <- filter(df19, str_detect(program, 'MPH'))
+mph18 <- filter(df18, str_detect(program, 'MPH'))
+mph17 <- filter(df17, str_detect(program, 'MPH'))
+
+## 1. Declined
+
+mph19dec <- filter(mph19, str_detect(status, 'Declined Offer'))
+mph18dec <- filter(mph18, str_detect(status, 'Declined Offer'))
+mph17dec <- filter(mph17, str_detect(status, 'Declined Offer'))
+
+mphdecprop19 <- nrow(mph19dec)/nrow(mph19)
+mphdecprop18 <- nrow(mph18dec)/nrow(mph18)
+mphdecprop17 <- nrow(mph17dec)/nrow(mph17)
+
+## 2. Answered survey (among declined)
+
+mph19resp <- filter(mph19dec, !is.na(answ))
+mph18resp <- filter(mph18dec, !is.na(answ))
+mph17resp <- filter(mph17dec, !is.na(answ))
+
+mph_resprop19 <- nrow(mph19resp)/nrow(mph19dec)
+mph_resprop18 <- nrow(mph18resp)/nrow(mph18dec)
+mph_resprop17 <- nrow(mph17resp)/nrow(mph17dec)
+
+
+## 3. Declined for another school
+
+mph19_othersch <- nrow(filter(mph19, str_detect(reason1, 'another school')))
+mph18_othersch <- nrow(filter(mph18, str_detect(reason1, 'another school')))
+mph17_othersch <- nrow(filter(mph17, str_detect(reason1, 'another school')))
+
+
+
+## 4. FULL/NOT vs FULL TIME
+
+mph19 <- mutate(mph19, full=str_detect(program, 'Full'))
+mph19$year <- as.integer(2019)
+mph19 = mph19 %>% mutate(
+  full_part = case_when(
+    str_detect(program, 'Full') ~ 'fulltime',
+    str_detect(program, 'Online') ~ 'parttime/online'
+  )
+)
+
+mph18 <- mutate(mph18, full=str_detect(program, 'Full'))
+mph18$year <- as.integer(2018)
+mph18 = mph18 %>% mutate(
+  full_part = case_when(
+    str_detect(program, 'Full') ~ 'fulltime',
+    str_detect(program, 'Online') ~ 'parttime/online'
+  )
+)
+
+mph17$year <- as.integer(2017)
+mph17 = mph17 %>% mutate(
+  full_part = case_when(
+    str_detect(program, 'Full') ~ 'fulltime',
+    str_detect(program, 'Online') ~ 'parttime/online'
+  )
+)
+
+mph_full19 <- filter(mph19, full_part == 'fulltime')
+mph_full18 <- filter(mph18, full_part == 'fulltime')
+mph_full17 <- filter(mph17, full_part == 'fulltime')
+
+mphfullprop19 <- nrow(mph_full19)/nrow(mph19)
+mphfullprop18 <- nrow(mph_full18)/nrow(mph18)
+mphfullprop17 <- nrow(mph_full17)/nrow(mph17)
+
+cols <-  c('year', 'full_part', 'reason1','reason2', 'reason3', 'reason4', 'status', 'answ', "reason_other_sch")
+dfMPH19 <- select(mph19, 'year', 'full_part', 'reason1','reason2', 'reason3', 'reason4', 'status', 'answ', 'twoMainReasons', "reason_other_sch")
+dfMPH18 <- select(mph18, 'year', 'full_part', 'reason1','reason2', 'reason3', 'reason4', 'status', 'answ', 'twoMainReasons', "reason_other_sch")
+dfMPH17 <- select(mph17, 'year', 'full_part', 'reason1','reason2', 'reason3', 'reason4', 'status', 'answ', 'twoMainReasons', "reason_other_sch")
+
+dfMPH <- rbind(dfMPH19,dfMPH18)
+dfMPH <- rbind(dfMPH,dfMPH17)
+
+
+# III. PLOTS
+
+# 1. Main reasons
+
+# General
+
+plotMainReasons<- function(df, reason_num, wna=FALSE) {
+
+  if (wna==FALSE) {
+    dfn <- subset(df, !is.na(df[,reason_num]) & !is.na(full_part))
+    title <- paste0(paste0('MPH: ', paste0(toupper(substr(reason_num, 1, 1)), substr(reason_num, 2, nchar(reason_num)))), ' for Declining Offer (N, Excludes NA)')
+    }
+  else {
+    dfn <- subset(df, !is.na(full_part))
+    title <- paste0(paste0('MPH: ', paste0(toupper(substr(reason_num, 1, 1)), substr(reason_num, 2, nchar(reason_num)))), ' for Declining Offer (N)')
+  }
+  
+  Y <- dfn[,reason_num]
+  ggplot(data = dfn, aes(x = year, color = Y)) + 
+  geom_line(stat='count', size=0.5) +
+  geom_point(stat='count') +
+  scale_x_continuous(breaks=c(2017, 2018, 2019)) +
+  ggtitle(title ) + 
+  theme(panel.background = element_rect(fill = "white",
+              colour = "gray", size = 0.5, linetype = "solid"), legend.title = element_blank()) +
+  facet_grid(. ~ full_part)
+}
+
+plot2MainReasonsBar<- function(df, reason_num, wna = FALSE, perc=FALSE) {
+  dfn <- subset(df,!is.na(full_part))
+  
+  if (wna==FALSE) {
+    dfn <- subset(dfn, !str_detect(twoMainReasons, 'NA'))
+    title <- paste0(paste0('MPH: ', paste0(toupper(substr(reason_num, 1, 1)), substr(reason_num, 2, nchar(reason_num)))), ' for Declining Offer (Excludes NA)')
+  } else {dfn<- dfn
+      title <- paste0(paste0('MPH: ', paste0(toupper(substr(reason_num, 1, 1)), substr(reason_num, 2, nchar(reason_num)))), ' for Declining Offer')}
+  
+  Y <- dfn[,reason_num]
+  
+  if (perc==FALSE) {
+    title <- paste0(title, ', N')
+    
+  ggplot(data = dfn, aes(x = year, fill= Y)) + 
+    geom_bar(stat = "count", color="black", size=0.35) +
+    scale_x_continuous(breaks=c(2017, 2018, 2019)) +
+    ggtitle(title ) + 
+    theme(panel.background = element_rect(fill = "white",
+                                          colour = "gray",
+                                          size = 0.5, linetype = "solid"), legend.title = element_blank()) +
+    theme(legend.direction = "horizontal", legend.position = "bottom", legend.text=element_text(size=6), legend.key.size = unit(0.65,"line")) +
+    facet_grid(. ~ full_part)
+} else {
+    title <- title <- paste0(title, ', %')
+ 
+    ggplot(data = dfn, aes(x = year, fill= Y)) + 
+    geom_bar(position = "fill", color="black", size=0.35) +
+    scale_x_continuous(breaks=c(2017, 2018, 2019)) +
+    ggtitle(title ) + 
+    theme(panel.background = element_rect(fill = "white",
+                                          colour = "gray",
+                                          size = 0.5, linetype = "solid"), legend.title = element_blank()) +
+     
+    theme(legend.direction = "horizontal", legend.position = "bottom", legend.text=element_text(size=6), legend.key.size = unit(0.65,"line")) +
+    facet_grid(. ~ full_part)
+}
+}
+
+```
+
+## Reason 1 for Declining Offer
+
+```{r message=FALSE, warning=FALSE}
+
+plotMainReasons(dfMPH, reason_num='reason1')
+plotMainReasons(dfMPH, reason_num='reason1', wna=TRUE) # Incl NA
+
+```
+
+## Reason 2 for Declining Offer
+
+```{r message=FALSE, warning=FALSE}
+
+plotMainReasons(dfMPH, reason_num='reason2')
+plotMainReasons(dfMPH, reason_num='reason2', wna=TRUE) # Incl NA
+
+```
+
+## Reason 3 for Declining Offer
+
+```{r message=FALSE, warning=FALSE}
+
+plotMainReasons(dfMPH, reason_num='reason3')
+plotMainReasons(dfMPH, reason_num='reason3', wna=TRUE) # Incl NA
+```
+
+## Reason 4 for Declining Offer
+
+```{r message=FALSE, warning=FALSE}
+
+plotMainReasons(dfMPH, reason_num='reason4')
+plotMainReasons(dfMPH, reason_num='reason4', wna=TRUE) # Incl NA
+```
+
+## Two Main Reasons for Declining Offer
+
+After seeing that the vast majority of respondants don't specify a 3rd or 4th reason, we might want only to explore reason 1 & reason 2 combinations:
+
+```{r message=FALSE, warning=FALSE, fig.width=9, fig.height=6}
+plotMainReasons(dfMPH, reason_num='twoMainReasons', wna=TRUE)
+```
+
+```{r message=FALSE, warning=FALSE, fig.width=7, fig.height=6}
+plot2MainReasonsBar(dfMPH, reason_num='twoMainReasons', perc=TRUE)
+plot2MainReasonsBar(dfMPH, reason_num='twoMainReasons', perc=TRUE, wna=TRUE)
+```
+
